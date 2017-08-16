@@ -1,0 +1,22 @@
+{
+  "name": "printful-shopify-test",
+  "version": "1.0.0",
+  "description": "A test of the server code that will connect printful and shopify.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asaalger/printful-shopify-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/asaalger/printful-shopify-test/issues"
+  },
+  "homepage": "https://github.com/asaalger/printful-shopify-test#readme",
+  "dependencies": {
+    "restify": "^5.1.0"
+  }
+}
