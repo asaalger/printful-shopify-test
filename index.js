@@ -1,3 +1,6 @@
+// var CUR_SERVER = "localhost";
+var CUR_SERVER = "fritzdavenport.com";
+
 var restify = require('restify');
 var request = require('request');
 
@@ -51,14 +54,14 @@ server.post('/order/:details', function (req, res, next) {
 	exec('magick composite ./test_images/left.png ./test_images/right.png ./renders/composite.png');
 
 	/// SENDING PRINTFUL OBJ
-	// request.post('http://localhost:8090/echo/anOrder', function (error, response, body) {
+	// request.post('http://'+CUR_SERVER+':8090/echo/anOrder', function (error, response, body) {
 	//   console.log('error:', error); // Print the error if one occurred
 	//   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 	//   console.log('body:', body); // Print the HTML for the Google homepage.
 	// });
 
 	var options = {
-		url: 'http://localhost:8090/echo/anOrder',
+		url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
 		// url: 'https://requestb.in/yd9g73yd',
 		body: JSON.stringify(printfulObject),
 		headers: {
