@@ -3,6 +3,7 @@ var CUR_SERVER = "fritzdavenport.com";
 
 var restify = require('restify');
 var request = require('request');
+var child_process = require('child_process');
 
 const server = restify.createServer({
   name: 'myapp',
