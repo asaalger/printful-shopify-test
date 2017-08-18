@@ -52,7 +52,8 @@ server.post('/order/:details', function (req, res, next) {
 	}
 
 	//CREATING CORRECT IMAGE
-	exec('magick composite ./test_images/left.png ./test_images/right.png ./renders/composite.png');
+	// exec('magick composite ./test_images/left.png ./test_images/right.png ./renders/composite.png'); //local
+	exec('composite ./test_images/left.png ./test_images/right.png ./renders/composite.png'); //server
 
 	/// SENDING PRINTFUL OBJ
 	// request.post('http://'+CUR_SERVER+':8090/echo/anOrder', function (error, response, body) {
