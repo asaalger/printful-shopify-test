@@ -20,7 +20,6 @@ server.post('/order/:details', function (req, res, next) {
 
 	res.send(req.params); //response to request
 
-
 	///  CONSTRUCTING PRINTFUL OBJ
 	var printfulObject = {
 		external_id:"820982911946154508",
@@ -40,49 +39,293 @@ server.post('/order/:details', function (req, res, next) {
 	};
 
 	for(var i = 0; i < req.params.line_items.length; i++){
+		var cut = req.params.line_items[i].properties.Cut;
+		var size = req.params.line_items[i].properties.Size;
+
+		var left_char_id = getCharID(req.params.line_items[i].properties.Left);
+		var right_char_id  = getCharID(req.params.line_items[i].properties.Right);
+		
+		var left_variant_id = getVariantID(left_char_id, req.params.line_items[i]);
+		var right_variant_id = getVariantID(right_char_id, req.params.line_items[i]);
+
+		var left_img_url = './src_images/'+left_char_id+'_'+left_variant_id+"_L.png";
+		var right_img_url = './src_images/'+right_char_id+'_'+right_variant_id+"_R.png";
+
+		var image_uid = "UNIQUE_STRING"
+
+		var printful_variant_id = getPrintfulCutID(cut, size);
+
+		// console.log("cut = "+cut+"\n",
+		// 			"size = "+size+"\n",
+		// 			"left_char_id = "+left_char_id+"\n",
+		// 			"right_char_id = "+right_char_id+"\n",
+		// 			"left_variant_id = "+left_variant_id+"\n",
+		// 			"right_variant_id = "+right_variant_id+"\n",
+		// 			"left_img_url = "+left_img_url+"\n",
+		// 			"right_img_url = "+right_img_url+"\n",
+		// 			"printful_variant_id = "+printful_variant_id+"\n"
+		// 			);
+
 		var itemObj = {
-	        "variant_id": 8083,  //medium sub shirt.  Other id's here https://www.printful.com/products
+	        "variant_id": printful_variant_id,
 	        "external_id": req.params.line_items[i].external_id,
 	        "quantity": req.params.line_items[i].quantity,
 	        "files": [{
-	            "url": "http://i0.kym-cdn.com/entries/icons/original/000/000/091/TrollFace.jpg"
+	            "url": image_uid+".png"
 	        }]
 	    }
 		printfulObject.items.push(itemObj);
+
+		//CREATING CORRECT IMAGE
+		// console.log("making image\n",'magick composite '+left_img_url+' '+right_img_url+' ./renders/composite.png');
+		// exec('magick composite '+left_img_url+' '+right_img_url+' ./renders/'+image_uid+'.png', (error, stdout, stderr) => { //local
+		exec('composite '+left_img_url+' '+right_img_url+' ./renders/composite.png', (error, stdout, stderr) => { //server
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+			console.log(`stdout: ${stdout}`);
+			console.log(`stderr: ${stderr}`);
+
+			//FINISH PROCESS
+			console.log("made image named "+image_uid+'.png');
+
+			/// SENDING PRINTFUL OBJ
+			// var options = {
+			// 	url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
+			// 	// url: 'https://requestb.in/yd9g73yd',
+			// 	body: JSON.stringify(printfulObject),
+			// 	headers: {
+			// 		'Content-Type':' application/json',
+			// 		// 'Content-Length':' 3799',
+			// 		'User-Agent':'node',
+			// 	}
+			// };
+
+			// console.log("sending...");
+			// request.post(options, function optionalCallback(err, response, body) {
+			// 	if (err) {
+			// 	  return console.error('upload failed:', err);
+			// 	}
+			// 	console.log('Upload successful!  Server responded with:', body);
+			// });	
+			// console.log("send done");
+		});
 	}
-
-	//CREATING CORRECT IMAGE
-	// exec('magick composite ./test_images/left.png ./test_images/right.png ./renders/composite.png'); //local
-	exec('composite ./test_images/left.png ./test_images/right.png ./renders/composite.png'); //server
-
-	/// SENDING PRINTFUL OBJ
-	// request.post('http://'+CUR_SERVER+':8090/echo/anOrder', function (error, response, body) {
-	//   console.log('error:', error); // Print the error if one occurred
-	//   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-	//   console.log('body:', body); // Print the HTML for the Google homepage.
-	// });
-
-	var options = {
-		url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
-		// url: 'https://requestb.in/yd9g73yd',
-		body: JSON.stringify(printfulObject),
-		headers: {
-			'Content-Type':' application/json',
-			// 'Content-Length':' 3799',
-			'User-Agent':'node',
-		}
-	};
-
-	console.log("sending...");
-	request.post(options, function optionalCallback(err, response, body) {
-		if (err) {
-		  return console.error('upload failed:', err);
-		}
-		console.log('Upload successful!  Server responded with:', body);
-	});	
-	console.log("send done");
 });
 
 server.listen(8080, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+function getCharID(charString){
+	switch(charString){
+		case 'Abraham Lincoln':
+			return "ABR";
+			break;
+		case 'Albert Einstein':
+			return "EIN";
+			break;
+		case 'Athena of Olympus':
+			return "ATH";
+			break;
+		case 'Cthulu the Destroyer':
+			return "CTH";
+			break;
+		case 'Genghis Khan':
+			return "GEN";
+			break;
+		case 'Jesus Christ':
+			return "JES";
+			break;
+		case 'King Arthur':
+			return "ART";
+			break;
+		case 'Santa Clause':
+			return "SAN";
+			break;
+	}
+}
+function getVariantID(charID, JSONobj){
+	var variant;
+
+	switch(charID){
+		case 'ABR':
+			switch(JSONobj.properties["Lincoln"]){
+				case 'Mr President':
+					variant = '001';
+					break;
+				case 'Velvet Abe':
+					variant = '002';
+					break;
+				case 'Uncle Sam':
+					variant = '003';
+					break;
+				case 'Rainbow Abe':
+					variant = '004';
+					break;
+			}
+			break;
+		case 'EIN':
+			switch(JSONobj.properties["Einstein"]){
+				case 'Dr. Einstein':
+					variant = '001';
+					break;
+				case 'Young Albert':
+					variant = '002';
+					break;
+				case 'The Great Mishap':
+					variant = '003';
+					break;
+				case 'Grandpa Al':
+					variant = '004';
+					break;
+				case 'Power of the Mind':
+					variant = '005';
+					break;
+			}
+			break;
+		case 'ATH':
+			switch(JSONobj.properties["Athena"]){
+				case 'Goddess of Wisdom':
+					variant = '001';
+					break;
+				case 'Violet Violence':
+					variant = '002';
+					break;
+				case 'Living Scuplture':
+					variant = '003';
+					break;
+				case 'Recovered Relic':
+					variant = '004';
+					break;
+			}
+			break;
+		case 'CTH':
+			switch(JSONobj.properties["Cthulu"]){
+				case 'World Eater':
+					variant = '001';
+					break;
+				case 'Abbadon':
+					variant = '002';
+					break;
+				case 'King Below the Sea':
+					variant = '003';
+					break;
+				case 'Pluton':
+					variant = '004';
+					break;
+			}
+			break;
+		case 'GEN':
+			switch(JSONobj.properties["Genghis Khan"]){
+				case 'Temujin':
+					variant = '001';
+					break;
+				case 'The Bloody Butcher':
+					variant = '002';
+					break;
+				case 'Purple People Eater':
+					variant = '003';
+					break;
+			}
+			break;
+		case 'JES':
+			switch(JSONobj.properties["Jesus Christ"]){
+				case 'King James':
+					variant = '001';
+					break;
+				case 'Historical':
+					variant = '002';
+					break;
+				case 'Anointed Son':
+					variant = '003';
+					break;
+				case 'Super Jesus':
+					variant = '004';
+					break;
+			}
+			break;
+		case 'ART':
+			switch(JSONobj.properties["King Arthur"]){
+				case 'King of Britannia':
+					variant = '001';
+					break;
+				case 'Undead Lord':
+					variant = '002';
+					break;
+				case 'Autumn Warrior':
+					variant = '003';
+					break;
+			}
+			break;
+		case 'SAN':
+			switch(JSONobj.properties["Santa Clause"]){
+				case 'Saint Nick':
+					variant = '001';
+					break;
+				case 'After Midnight':
+					variant = '002';
+					break;
+				case 'Hobo Steve':
+					variant = '003';
+					break;
+				case 'Krampus':
+					variant = '004';
+					break;
+			}
+			break;
+		
+	}
+	return variant;
+}
+
+function getPrintfulCutID(cut, size){
+	var printful_id;
+
+	switch(cut){
+		case 'Mens Shirt':
+			switch(size){
+				case 'XS':
+					printful_id = '8089';
+					break;
+				case 'S':
+					printful_id = '8082';
+					break;
+				case 'M':
+					printful_id = '8083';
+					break;
+				case 'L':
+					printful_id = '8084';
+					break;
+				case 'XL':
+					printful_id = '8085';
+					break;
+				case '2XL':
+					printful_id = '8086';
+					break;
+			}
+			return printful_id;
+			break;
+		case 'Womens Shirt':
+			switch(size){
+				case 'S':
+					printful_id = '8077';
+					break;
+				case 'M':
+					printful_id = '8078';
+					break;
+				case 'L':
+					printful_id = '8079';
+					break;
+				case 'XL':
+					printful_id = '8080';
+					break;
+				case '2XL':
+					printful_id = '8081';
+					break;
+			}
+			return printful_id;
+			break;
+	}
+}
