@@ -39,14 +39,21 @@ server.post('/order/:details', function (req, res, next) {
 	};
 
 	for(var i = 0; i < req.params.line_items.length; i++){
-		var cut = req.params.line_items[i].properties.Cut;
-		var size = req.params.line_items[i].properties.Size;
+		// var cut = req.params.line_items[i].properties.Cut;
+		var cut = getByValue(req.params.line_items[i].properties, "Cut").value;
+		// var size = req.params.line_items[i].properties.Size;
+		var size = getByValue(req.params.line_items[i].properties, "Size").value;
 
-		var left_char_id = getCharID(req.params.line_items[i].properties.Left);
-		var right_char_id  = getCharID(req.params.line_items[i].properties.Right);
+		// var left_char_id = getCharID(req.params.line_items[i].properties.Left);
+		var left_char_id = getCharID(getByValue(req.params.line_items[i].properties, "Left").value);
+		// var right_char_id  = getCharID(req.params.line_items[i].properties.Right);
+		var right_char_id = getCharID(getByValue(req.params.line_items[i].properties, "Right").value);
 		
-		var left_variant_id = getVariantID(left_char_id, req.params.line_items[i]);
-		var right_variant_id = getVariantID(right_char_id, req.params.line_items[i]);
+		var left_variant_id = getVariantID(left_char_id, req.params.line_items[i].properties);
+		// var left_variant_id = getByValue(req.params.line_items[i].properties, "Cut").value;
+
+		var right_variant_id = getVariantID(right_char_id, req.params.line_items[i].properties);
+		// var right_variant_id = getByValue(req.params.line_items[i].properties, "Cut").value;
 
 		var left_img_url = './src_images/'+left_char_id+'_'+left_variant_id+"_L.png";
 		var right_img_url = './src_images/'+right_char_id+'_'+right_variant_id+"_R.png";
@@ -55,16 +62,16 @@ server.post('/order/:details', function (req, res, next) {
 
 		var printful_variant_id = getPrintfulCutID(cut, size);
 
-		// console.log("cut = "+cut+"\n",
-		// 			"size = "+size+"\n",
-		// 			"left_char_id = "+left_char_id+"\n",
-		// 			"right_char_id = "+right_char_id+"\n",
-		// 			"left_variant_id = "+left_variant_id+"\n",
-		// 			"right_variant_id = "+right_variant_id+"\n",
-		// 			"left_img_url = "+left_img_url+"\n",
-		// 			"right_img_url = "+right_img_url+"\n",
-		// 			"printful_variant_id = "+printful_variant_id+"\n"
-		// 			);
+		console.log("cut = "+cut+"\n",
+					"size = "+size+"\n",
+					"left_char_id = "+left_char_id+"\n",
+					"right_char_id = "+right_char_id+"\n",
+					"left_variant_id = "+left_variant_id+"\n",
+					"right_variant_id = "+right_variant_id+"\n",
+					"left_img_url = "+left_img_url+"\n",
+					"right_img_url = "+right_img_url+"\n",
+					"printful_variant_id = "+printful_variant_id+"\n"
+					);
 
 		//GENERATE UNIQUE ID
 		var uuidv1;
@@ -80,7 +87,7 @@ server.post('/order/:details', function (req, res, next) {
 	        }]
 	    }
 		printfulObject.items.push(itemObj);
-
+		
 		//CREATING CORRECT IMAGE
 		// console.log("making image\n",'magick composite '+left_img_url+' '+right_img_url+' ./renders/composite.png');
 		// exec('magick composite '+left_img_url+' '+right_img_url+' ./renders/'+image_uid+'.png', (error, stdout, stderr) => { //local
@@ -116,6 +123,7 @@ server.post('/order/:details', function (req, res, next) {
 			// });	
 			// console.log("send done");
 		});
+		
 	}
 });
 
@@ -156,7 +164,9 @@ function getVariantID(charID, JSONobj){
 
 	switch(charID){
 		case 'ABR':
-			switch(JSONobj.properties["Lincoln"]){
+			// switch(JSONobj.properties["Lincoln"]){
+			switch(getByValue(JSONobj, "Lincoln").value){
+				
 				case 'Mr President':
 					variant = '001';
 					break;
@@ -236,7 +246,8 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'JES':
-			switch(JSONobj.properties["Jesus Christ"]){
+			// switch(JSONobj.properties["Jesus Christ"]){
+			switch(getByValue(JSONobj, "Jesus Christ").value){
 				case 'King James':
 					variant = '001';
 					break;
@@ -265,7 +276,8 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'SAN':
-			switch(JSONobj.properties["Santa Clause"]){
+			// switch(JSONobj.properties["Santa Clause"]){
+			switch(getByValue(JSONobj, "Santa Clause").value){
 				case 'Saint Nick':
 					variant = '001';
 					break;
@@ -333,4 +345,12 @@ function getPrintfulCutID(cut, size){
 			return printful_id;
 			break;
 	}
+}
+
+function getByValue(arr, value) {
+
+  for (var i=0, iLen=arr.length; i<iLen; i++) {
+
+    if (arr[i].name == value) return arr[i];
+  }
 }
