@@ -66,6 +66,11 @@ server.post('/order/:details', function (req, res, next) {
 		// 			"printful_variant_id = "+printful_variant_id+"\n"
 		// 			);
 
+		//GENERATE UNIQUE ID
+		var uuidv1;
+		uuidv1 = require('uuid/v1');
+		image_uid = uuidv1();
+
 		var itemObj = {
 	        "variant_id": printful_variant_id,
 	        "external_id": req.params.line_items[i].external_id,
@@ -79,7 +84,7 @@ server.post('/order/:details', function (req, res, next) {
 		//CREATING CORRECT IMAGE
 		// console.log("making image\n",'magick composite '+left_img_url+' '+right_img_url+' ./renders/composite.png');
 		// exec('magick composite '+left_img_url+' '+right_img_url+' ./renders/'+image_uid+'.png', (error, stdout, stderr) => { //local
-		exec('composite '+left_img_url+' '+right_img_url+' ./renders/composite.png', (error, stdout, stderr) => { //server
+		exec('composite '+left_img_url+' '+right_img_url+' ./renders/'+image_uid+'.png', (error, stdout, stderr) => { //server
 			if (error) {
 				console.error(`exec error: ${error}`);
 				return;
