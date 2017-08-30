@@ -22,7 +22,7 @@ server.post('/order/:details', function (req, res, next) {
 
 	///  CONSTRUCTING PRINTFUL OBJ
 	var printfulObject = {
-		external_id:"820982911946154508",
+		// external_id:"820982911946154508",
 		shipping: "STANDARD",
 	    "recipient": {
 	        "name": req.params.shipping_address.name,
@@ -102,26 +102,29 @@ server.post('/order/:details', function (req, res, next) {
 			//FINISH PROCESS
 			console.log("made image named "+image_uid+'.png');
 
-			/// SENDING PRINTFUL OBJ
-			// var options = {
-			// 	url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
-			// 	// url: 'https://requestb.in/yd9g73yd',
-			// 	body: JSON.stringify(printfulObject),
-			// 	headers: {
-			// 		'Content-Type':' application/json',
-			// 		// 'Content-Length':' 3799',
-			// 		'User-Agent':'node',
-			// 	}
-			// };
 
-			// console.log("sending...");
-			// request.post(options, function optionalCallback(err, response, body) {
-			// 	if (err) {
-			// 	  return console.error('upload failed:', err);
-			// 	}
-			// 	console.log('Upload successful!  Server responded with:', body);
-			// });	
-			// console.log("send done");
+			// SENDING PRINTFUL OBJ
+			var options = {
+				// url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
+				url: 'https://api.printful.com/orders/',
+				// url: 'https://requestb.in/yd9g73yd',
+				body: JSON.stringify(printfulObject),
+				headers: {
+					'Content-Type':' application/json',
+					// 'Content-Length':' 3799',
+					'User-Agent':'node',
+					'Authorization': 'aGFwMmd5YnYtYW9nMS16cWpzOjZkd2ItZzdmb25tMXE1OHhu'
+				}
+			};
+
+			console.log("sending...");
+			request.post(options, function optionalCallback(err, response, body) {
+				if (err) {
+				  return console.error('upload failed:', err);
+				}
+				console.log('Upload successful!  Server responded with:', body);
+			});	
+			console.log("send done");
 		});
 		
 	}
