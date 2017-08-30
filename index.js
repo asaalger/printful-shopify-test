@@ -206,7 +206,7 @@ function getVariantID(charID, JSONobj){
 				case 'Violet Violence':
 					variant = '002';
 					break;
-				case 'Living Scuplture':
+				case 'Living Sculpture':
 					variant = '003';
 					break;
 				case 'Recovered Relic':
