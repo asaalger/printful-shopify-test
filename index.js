@@ -14,6 +14,11 @@ server.use(restify.plugins.queryParser());
 // server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 
+//setup public image access
+server.get(/\/renders\/monster\/?.*/, restify.serveStatic({
+  directory: './renders/'
+}));
+
 
 server.post('/order/:details', function (req, res, next) {
 	console.log("NEW ORDER FROM SHOPIFY\n"+"details--> "+req.params, req.params.email, req.params.total_price);
@@ -83,7 +88,7 @@ server.post('/order/:details', function (req, res, next) {
 	        "external_id": req.params.line_items[i].external_id,
 	        "quantity": req.params.line_items[i].quantity,
 	        "files": [{
-	            "url": image_uid+".png"
+	            "url": 'http://fritzdavenport.com:8080/renders/monster/'+image_uid+".png"
 	        }]
 	    }
 		printfulObject.items.push(itemObj);
@@ -106,8 +111,8 @@ server.post('/order/:details', function (req, res, next) {
 			// SENDING PRINTFUL OBJ
 			var options = {
 				// url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
-				url: 'https://api.printful.com/orders/',
-				// url: 'https://requestb.in/yd9g73yd',
+				// url: 'https://api.printful.com/orders/',
+				url: 'https://requestb.in/p1xmogp1',
 				body: JSON.stringify(printfulObject),
 				headers: {
 					'Content-Type':' application/json',
