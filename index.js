@@ -180,7 +180,7 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'EIN':
-			switch(getByValue(JSONobj, "Einstein").value){
+			switch(getByValue(JSONobj, "Albert Einstein").value){
 				case 'Dr. Einstein':
 					variant = '001';
 					break;
