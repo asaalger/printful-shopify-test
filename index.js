@@ -112,8 +112,8 @@ server.post('/order/:details', function (req, res, next) {
 			// SENDING PRINTFUL OBJ
 			var options = {
 				// url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
-				// url: 'https://api.printful.com/orders/',
-				url: 'https://requestb.in/p1xmogp1',
+				url: 'https://api.printful.com/orders/',
+				// url: 'https://requestb.in/p1xmogp1',
 				body: JSON.stringify(printfulObject),
 				headers: {
 					'Content-Type':' application/json',
