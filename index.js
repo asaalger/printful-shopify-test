@@ -15,8 +15,8 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 
 //setup public image access
-server.get(/\/renders\/monster\/?.*/, restify.plugins.serveStatic({
-  directory: '.'
+server.get(/\/renders\/?.*/, restify.plugins.serveStatic({
+  directory: __dirname
 }));
 
 
