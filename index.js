@@ -114,11 +114,13 @@ server.post('/order/:details', function (req, res, next) {
 				// url: 'http://'+CUR_SERVER+':8090/echo/anOrder',
 				url: 'https://api.printful.com/orders/',
 				// url: 'https://requestb.in/p1xmogp1',
-				body: JSON.stringify(printfulObject),
+				// body: JSON.stringify(printfulObject),
+				body: printfulObject,
+				json: true,
 				headers: {
-					'Content-Type':' application/json',
+					// 'Content-Type':' application/json',
 					// 'Content-Length':' 3799',
-					'User-Agent':'node',
+					// 'User-Agent':'node',
 					'Authorization': 'Basic aGFwMmd5YnYtYW9nMS16cWpzOjZkd2ItZzdmb25tMXE1OHhu'
 				}
 			};
