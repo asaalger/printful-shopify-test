@@ -164,9 +164,7 @@ function getVariantID(charID, JSONobj){
 
 	switch(charID){
 		case 'ABR':
-			// switch(JSONobj.properties["Lincoln"]){
 			switch(getByValue(JSONobj, "Lincoln").value){
-				
 				case 'Mr President':
 					variant = '001';
 					break;
@@ -182,7 +180,7 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'EIN':
-			switch(JSONobj.properties["Einstein"]){
+			switch(getByValue(JSONobj, "Einstein").value){
 				case 'Dr. Einstein':
 					variant = '001';
 					break;
@@ -202,6 +200,7 @@ function getVariantID(charID, JSONobj){
 			break;
 		case 'ATH':
 			switch(JSONobj.properties["Athena"]){
+			switch(getByValue(JSONobj, "Athena").value){
 				case 'Goddess of Wisdom':
 					variant = '001';
 					break;
@@ -217,7 +216,7 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'CTH':
-			switch(JSONobj.properties["Cthulu"]){
+			switch(getByValue(JSONobj, "Cthulu").value){
 				case 'World Eater':
 					variant = '001';
 					break;
@@ -233,7 +232,7 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'GEN':
-			switch(JSONobj.properties["Genghis Khan"]){
+			switch(getByValue(JSONobj, "Genghis Khan").value){
 				case 'Temujin':
 					variant = '001';
 					break;
@@ -246,7 +245,6 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'JES':
-			// switch(JSONobj.properties["Jesus Christ"]){
 			switch(getByValue(JSONobj, "Jesus Christ").value){
 				case 'King James':
 					variant = '001';
@@ -263,7 +261,7 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'ART':
-			switch(JSONobj.properties["King Arthur"]){
+				switch(getByValue(JSONobj, "King Arthur").value){
 				case 'King of Britannia':
 					variant = '001';
 					break;
