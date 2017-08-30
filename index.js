@@ -199,7 +199,6 @@ function getVariantID(charID, JSONobj){
 			}
 			break;
 		case 'ATH':
-			switch(JSONobj.properties["Athena"]){
 			switch(getByValue(JSONobj, "Athena").value){
 				case 'Goddess of Wisdom':
 					variant = '001';
