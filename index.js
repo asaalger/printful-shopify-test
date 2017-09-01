@@ -235,7 +235,7 @@ function getVariantID(charID, JSONobj){
 				case 'King Below the Sea':
 					variant = '003';
 					break;
-				case 'Pluton':
+				case 'Lord Pluton':
 					variant = '004';
 					break;
 			}
