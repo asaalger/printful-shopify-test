@@ -90,6 +90,9 @@ server.post('/order/:details', function (req, res, next) {
 	        "quantity": req.params.line_items[i].quantity,
 	        "files": [{
 	            "url": 'http://fritzdavenport.com:8080/renders/monster/'+image_uid+".png"
+	        }, {
+	        	"type": "inside",
+	        	"url": "http://firtzdavenport.com:8080/renders/monster/inside/insideprint_"+size+".png"
 	        }]
 	    }
 		printfulObject.items.push(itemObj);
